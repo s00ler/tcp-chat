@@ -60,5 +60,5 @@ class Room:
         now = datetime.datetime.now().strftime('%H:%M')
         for client in self.users:
             if client != user:
-                client.send('{}> {}> @{}: {}'.format(
+                client.send('{} > {} > @{}: {}'.format(
                     self.name, user, now, message))

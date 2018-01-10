@@ -14,9 +14,13 @@ class User:
             'Enter your username (only alphabetic symbols allowed):\n'.encode())
 
         while cls.max_attempts > attempt:
-            await writer.drain()
             attempt += 1
-            data = await reader.readline()
+            try:
+                await writer.drain()
+                data = await reader.readline()
+            except Exception:
+                return None
+
             if data is not None:
                 data = data.decode().strip()
                 if data.isalpha():
@@ -86,6 +90,12 @@ class User:
             self.room = None
         else:
             self.send('You are not in any room.\n')
+
+    def broadcast(self, msg):
+        if self.room is None:
+            self.send('Message failed to send. Reason: no room joined.')
+        else:
+            self.room.broadcast(msg, self)
 
     def send(self, *args):
         """Send user a message."""

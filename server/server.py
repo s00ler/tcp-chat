@@ -35,6 +35,7 @@ class ChatServer:
             await self._handle_user(user)
         else:
             try:
+                print('Unknown disconnected.')
                 reader.feed_eof()
                 writer.write_eof()
             except Exception:
@@ -82,7 +83,7 @@ class ChatServer:
         if command[0] in self.commands:
             if command[0] == '@help':
                 self._help(user)
-            elif command[0] == '@list':
+            elif command[0] == '@rooms':
                 user.send('Rooms: {}.'.format(list(self._rooms.keys())))
             elif command[0] == '@disconnect':
                 user.connected = False
@@ -95,7 +96,7 @@ class ChatServer:
             elif command[0] == '@join' and len(command) == 2:
                 self._join_room(user, command[1])
         else:
-            user.send('Command unknown. Use @help.\n')
+            user.send('Command unknown. Use @help.')
 
     def _help(self, user):
         """Send help message to user."""
@@ -110,8 +111,8 @@ class ChatServer:
 
     def _create_room(self, user, name):
         """Create new room."""
-        if name not in self.rooms.keys():
-            self.rooms[name] = Room(name, user)
+        if name not in self._rooms.keys():
+            self._rooms[name] = Room(name, user)
             response = 'Room {} created.'.format(name)
         else:
             response = 'Room {} exists.'.format(name)
