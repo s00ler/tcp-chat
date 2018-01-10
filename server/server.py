@@ -11,8 +11,7 @@ class ChatServer:
     commands = ['@rooms', '@create', '@delete', '@join', '@leave',
                 '@help', '@disconnect']
 
-    def __init__(self, server_name: str, host: str, port: int,
-                 loop: asyncio.BaseEventLoop):
+    def __init__(self, server_name: str, host: str, port: int):
         """Initilise server.
 
         Args:
@@ -22,11 +21,21 @@ class ChatServer:
         """
         self._server_name = server_name
         self._rooms = {}
-        self._server = loop.run_until_complete(
+        self._loop = asyncio.get_event_loop()
+
+        self._server = self._loop.run_until_complete(
             asyncio.start_server(self._accept_connection,
                                  host,
                                  port,
-                                 loop=loop))
+                                 loop=self._loop))
+
+    def stop(self):
+        """Stop server."""
+        self._loop.stop()
+
+    def run(self):
+        """Start server."""
+        self._loop.run_forever()
 
     async def _accept_connection(self, reader, writer):
         """Accepting and processing connetions."""
