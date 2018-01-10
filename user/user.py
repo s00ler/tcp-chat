@@ -92,6 +92,7 @@ class User:
             self.send('You are not in any room.\n')
 
     def broadcast(self, msg):
+        """Broadcast message if in any room."""
         if self.room is None:
             self.send('Message failed to send. Reason: no room joined.')
         else:
