@@ -21,7 +21,7 @@ class Room:
     def __eq__(self, other: 'Room obj' or str):
         """Room obj can be compared to string and other Room obj.
 
-        Name attribute is compared really.
+        Name attributes are compared really.
         """
         if type(other) == type(self):
             return self.name == other.name

@@ -104,6 +104,8 @@ class ChatServer:
                 self._delete_room(user, command[1])
             elif command[0] == '@join' and len(command) == 2:
                 self._join_room(user, command[1])
+            else:
+                user.send('Command format unknown. Use @help.')
         else:
             user.send('Command unknown. Use @help.')
 
@@ -143,7 +145,7 @@ class ChatServer:
         elif room.father != user:
             response = 'You have no permission to delete room {}.'.format(name)
         else:
-            for client in room.users:
+            for client in list(room.users):
                 client.leave()
             del self._rooms[name]
             response = 'Room {} deleted.'.format(name)

@@ -103,7 +103,7 @@ class User:
         for message in args:
             if not message.endswith('\n'):
                 message += '\n'
-                self.writer.write(message.encode())
+            self.writer.write(message.encode())
 
     async def flush(self):
         """Flush user buffer."""
